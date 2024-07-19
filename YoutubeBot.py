@@ -96,7 +96,8 @@ def get_like_count(driver):
         return like_count
 
     except Exception as e:
-        return f"Hata: {str(e)}"
+        print(f"Hata: {str(e)}")
+        return "Error"
 
 def get_view_count(driver):
     """
@@ -107,8 +108,10 @@ def get_view_count(driver):
             EC.presence_of_element_located((By.CSS_SELECTOR, 'meta[itemprop="interactionCount"][content]'))
         )
         return view_count.get_attribute('content')
+
     except Exception as e:
-        return f"Hata: {str(e)}"
+        print(f"Hata: {str(e)}")
+        return "Error"
 
 def get_upload_date(driver):
     """
@@ -119,8 +122,10 @@ def get_upload_date(driver):
             EC.presence_of_element_located((By.CSS_SELECTOR, 'meta[itemprop="uploadDate"][content]'))
         )
         return upload_date.get_attribute('content').split('T')[0] if upload_date else None
+
     except Exception as e:
-        return f"Hata: {str(e)}"
+        print(f"Hata: {str(e)}")
+        return "Error"
 
 def get_subscriber_count(driver):
     """
@@ -138,7 +143,8 @@ def get_subscriber_count(driver):
         return subscriber_count_str
     
     except Exception as e:
-        return f"Hata: {str(e)}"
+        print(f"Hata: {str(e)}")
+        return "Error"
 
 def get_duration(driver):
     """
@@ -154,8 +160,10 @@ def get_duration(driver):
         duration_element = time_display_div.find_element(By.CSS_SELECTOR, '.ytp-time-duration')
         
         return duration_element.text
+
     except Exception as e:
-        return f"Hata: {str(e)}"
+        print(f"Hata: {str(e)}")
+        return "Error"
 
 def get_channel_name(driver):
     """
@@ -166,8 +174,10 @@ def get_channel_name(driver):
             EC.presence_of_element_located((By.CSS_SELECTOR, '.ytd-channel-name a'))
         )
         return channel_name_element.text
+
     except Exception as e:
-        return f"Hata: {str(e)}"
+        print(f"Hata: {str(e)}")
+        return "Error"
 
 ###Dönüştürme İşlemleri
 
@@ -218,7 +228,7 @@ def convert_subscriber_count(subscriber_count_str):
         if match:
             return int(match.group(1))  # İlk bulunan tam sayıyı döndürür
     else:
-        return subscriber_count_str  # Dönüşüm yapılamayan durumlar için orijinal stringi döndür
+        return "Error"  # Dönüşüm yapılamayan durumlar için Hata döndür
 
 ###Dosya İşlemleri
 
@@ -396,9 +406,17 @@ def process_videos(driver, search_term, video_links):
             subscriber_count_text = get_subscriber_count(driver) or 'Null'
             print(f'Abone Sayısı Metin: {subscriber_count_text}')
 
-            subscriber_count = convert_subscriber_count(subscriber_count_text)
-            if subscriber_count is not None and not str(subscriber_count).isdigit():
-                subscriber_count = None
+            if subscriber_count_text is None or subscriber_count_text == 'Null':
+                subscriber_count = 'Null'
+            elif subscriber_count_text == 'Error':
+                subscriber_count = 'Error'
+            else:
+                subscriber_count = convert_subscriber_count(subscriber_count_text)
+                if subscriber_count is not None and not str(subscriber_count).isdigit():
+                    subscriber_count = 'Error'
+                elif subscriber_count is None:
+                    subscriber_count = 'Null'
+
             print(f'Abone Sayısı: {subscriber_count}')
 
             duration = get_duration(driver) or 'Null'
@@ -425,8 +443,10 @@ def process_videos(driver, search_term, video_links):
 def main():
     choice = choose_search_method()
 
-    print("Bilgilendirme: Bazı YouTube kanalları, belirli verileri gizlemeyi tercih etmiş olabilir.")
-    print("Bu durumda, gizlenmiş veriler -Null- olarak alınacaktır.")
+    print("Bilgilendirme: Bazı YouTube kanalları belirli verileri gizlemeyi tercih edebilir.")
+    print("Bu durumda, gizlenmiş veriler 'Null' olarak gösterilecektir.")
+    print("Veri alınırken yaşanan sorunlar ekrana hata mesajı olarak yansıtılacak ve veritabanına 'Error' olarak kaydedilecektir.")
+
 
     if choice == '1':
         search_term, video_links = handle_standard_search()
