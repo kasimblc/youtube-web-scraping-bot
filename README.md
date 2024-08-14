@@ -52,4 +52,4 @@ Users can input a search keyword, and the program will scrape all relevant video
 Feel free to submit issues or pull requests if you find any bugs or have suggestions for improvements.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+This project is licensed under the GNU General Public License v3.0. See the LICENSE file for more details.
