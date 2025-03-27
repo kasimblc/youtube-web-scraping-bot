@@ -13,8 +13,43 @@ Kullanıcılar bir arama terimi girebilir ve program, ilgili tüm videoları kaz
 - Daha spesifik sonuçlar için detaylı aramalara izin verir.
 
 ## Gereksinimler
-- Python 3.x
-- Google Chrome tarayıcısı
+
+Bu proje için aşağıdaki gereksinimler karşılanmalıdır:
+
+### 1. Python Sürümü
+- **Python 3.x** sürümü gereklidir. Python'un en güncel 3.x sürümünü yüklediğinizden emin olun.
+
+### 2. Google Chrome Tarayıcısı ve ChromeDriver
+- **Google Chrome tarayıcısı** kullanılmaktadır.
+- **ChromeDriver**, tarayıcı ile otomasyon işlemlerini gerçekleştirmek için gereklidir.
+
+#### Önemli Bilgilendirme:
+- **Mevcut ChromeDriver sürümü: 114.0.5735.16**
+- **Bu sürüm, yalnızca Chrome 114 ile uyumludur.**
+- **Bu nedenle, sisteminizde Google Chrome'un 114.x sürümü yüklü olmalıdır.**
+- **Google Chrome genellikle en güncel sürüme otomatik olarak güncellendiği için, bu sürümden farklı bir Chrome kullanıyorsanız hata alabilirsiniz.**
+- **Eğer hata alıyorsanız, Chrome’un eski 114.x sürümünü indirerek kullanmalısınız.**
+
+### 3. Gelecekteki Güncellemeler İçin Dikkat Edilmesi Gerekenler
+- Chrome güncellendiğinde, ChromeDriver sürümü de değişebilir.
+- **Program, en güncel ChromeDriver sürümünü otomatik olarak indirir. Kullanıcının yalnızca kendi Chrome tarayıcı sürümünü uygun hale getirmesi gerekmektedir.**
+- **Yanlış sürüm kombinasyonu, otomasyon süreçlerinde hatalara yol açabilir.**
+- **Yeni Chrome sürümleri çıktığında, aşağıdaki komutları kullanarak uyumluluğu kontrol edebilirsiniz.**
+
+#### Chrome Sürümünü Kontrol Etme
+Chrome’un yüklü sürümünü öğrenmek için terminal veya komut satırında aşağıdaki komutu çalıştırabilirsiniz:
+```sh
+chrome --version  # Veya Windows için "chrome.exe --version"
+```
+
+Eğer Chrome sürümünüz mevcut ChromeDriver sürümüyle uyumlu değilse, **uygun Chrome sürümünü yüklemeniz gerekmektedir.**
+
+### 4. Kütüphanelerin Güncellenmesi
+Bu projede kullanılan kütüphanelerin en güncel sürümleriyle çalışması önemlidir. Güncel sürümler, hata düzeltmeleri ve yeni özellikler içerdiğinden, herhangi bir uyumluluk sorunu yaşamamak için kütüphanelerin güncelliğinden emin olunmalıdır.
+
+Kurulum adımlarında **gerekli kütüphaneleri yükleme ve güncelleme** adımları yer almaktadır. **Eğer kütüphaneler önceden yüklüyse, belirtilen güncelleme komutlarını çalıştırmayı unutmayın.** Aksi halde eski sürümler nedeniyle beklenmedik hatalarla karşılaşabilirsiniz.
+
+Detaylı kurulum adımları için aşağıdaki bölüme bakabilirsiniz.
 
 ### Adımlar
 1. Depoyu klonlayın:
