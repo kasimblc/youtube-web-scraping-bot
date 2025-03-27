@@ -27,7 +27,19 @@ Kullanıcılar bir arama terimi girebilir ve program, ilgili tüm videoları kaz
     ```sh
     pip install -r requirements.txt
     ```
+    
+3. Eğer gerekli kütüphaneler daha önceden yüklü ise, aşağıdaki komutlarla kütüphaneleri en son sürüme güncelleyin:
+    - **yt-dlp**: YouTube'dan video bilgisi kazımak için.
+    - **selenium**: Tarayıcı otomasyonu için.
+    - **webdriver-manager**: ChromeDriver sürüm yönetimi için.
 
+    Güncelleme komutları:
+    ```sh
+    pip install --upgrade yt-dlp
+    pip install --upgrade selenium
+    pip install --upgrade webdriver-manager
+    ```
+    
 ## Kullanım
 1. **Scripti çalıştırın**:
     ```sh
