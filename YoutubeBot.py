@@ -419,6 +419,7 @@ def process_videos(driver, search_term, video_links):
 
             print(f'Abone Sayısı: {subscriber_count}')
 
+            time.sleep(0.5)
             duration = get_duration(driver) or 'Null'
             print(f'Video Süresi: {duration}')
 
