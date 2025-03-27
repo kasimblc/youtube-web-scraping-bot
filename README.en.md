@@ -28,6 +28,18 @@ Users can input a search keyword, and the program will scrape all relevant video
     pip install -r requirements.txt
     ```
 
+3. If the necessary libraries are already installed, update them to the latest version:
+- **yt-dlp**: For scraping video information from YouTube.
+- **selenium**: For browser automation.
+- **webdriver-manager**: For managing ChromeDriver versions.
+
+Update commands:
+```sh
+pip install --upgrade yt-dlp
+pip install --upgrade selenium
+pip install --upgrade webdriver-manager
+```
+
 ## Usage
 1. **Run the script**:
     ```sh
