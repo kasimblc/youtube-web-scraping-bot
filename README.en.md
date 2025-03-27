@@ -13,8 +13,43 @@ Users can input a search keyword, and the program will scrape all relevant video
 - Allows detailed searches for more specific results.
 
 ## Requirements
-- Python 3.x
-- Google Chrome browser
+
+The following requirements must be met for this project:
+
+### 1. Python Version
+- **Python 3.x** is required. Make sure you have the latest 3.x version installed.
+
+### 2. Google Chrome Browser and ChromeDriver
+- **Google Chrome browser** is used in this project.
+- **ChromeDriver** is required to perform browser automation.
+
+#### Important Information:
+- **Current ChromeDriver version: 114.0.5735.16**
+- **This version is only compatible with Chrome 114.**
+- **Therefore, your system must have Google Chrome version 114.x installed.**
+- **Google Chrome usually updates automatically to the latest version, so if you are using a different version, you may encounter errors.**
+- **If you encounter errors, you need to download and use the older Chrome 114.x version.**
+
+### 3. Considerations for Future Updates
+- When Chrome updates, the ChromeDriver version also changes.
+- **The program automatically downloads the latest ChromeDriver version. Users only need to ensure that their Chrome browser version is compatible.**
+- **Incorrect version combinations can lead to errors in the automation process.**
+- **When new Chrome versions are released, you can check compatibility using the command below.**
+
+#### Checking Chrome Version
+To check the installed Chrome version, run the following command in the terminal or command prompt:
+```sh
+chrome --version  # Or for Windows: "chrome.exe --version"
+```
+
+If your Chrome version is not compatible with the current ChromeDriver version, **you need to install the appropriate Chrome version.**
+
+### 4. Updating Libraries
+It is important to work with the latest versions of the libraries used in this project. Updated versions include bug fixes and new features, so to avoid compatibility issues, make sure the libraries are up to date.
+
+The installation steps already include **commands for installing and updating the required libraries**. **If the libraries are already installed, do not skip the update commands mentioned.** Otherwise, you may experience unexpected errors due to outdated versions.
+
+For detailed installation steps, refer to the section below.
 
 ### Steps
 1. Clone the repository:
