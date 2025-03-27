@@ -2,8 +2,8 @@
 
 Welcome to the YouTube Web Scraping Tool! This tool extracts video information from YouTube and saves it as a CSV file. Select your preferred language to learn more about the project:
 
-- 🌐 -[English Documentation](README.en.md)
-- 🇹🇷 -[Türkçe Dokümantasyon](README.tr.md)
+- 🌐[English Documentation](README.en.md)
+- 🇹🇷[Türkçe Dokümantasyon](README.tr.md)
 
 ## Overview
 
