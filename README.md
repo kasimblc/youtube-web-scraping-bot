@@ -15,3 +15,11 @@ This project allows users to:
 ## Quick Start
 
 Choose one of the documentations above to get started in your preferred language.
+
+### Bilgilendirme / Information
+
+#### Türkçe:
+Bazı YouTube kanalları belirli verileri gizlemeyi tercih edebilir. Bu durumda, gizlenmiş veriler 'Null' olarak gösterilecektir. Veri alınırken yaşanan sorunlar ekrana hata mesajı olarak yansıtılacak ve veritabanına 'Error' olarak kaydedilecektir. Ayrıca, bazı video süre bilgileri yanlış olabilir.
+
+#### English:
+Some YouTube channels may prefer to hide certain data. In this case, the hidden data will be displayed as 'Null'. Issues encountered during data retrieval will appear as error messages on the screen and be recorded in the database as 'Error'. Additionally, some video duration information might be inaccurate.
