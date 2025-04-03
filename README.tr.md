@@ -75,7 +75,7 @@ Detaylı kurulum adımları için aşağıdaki bölüme bakabilirsiniz.
     pip install --upgrade webdriver-manager
     ```
     
-## Kullanım
+## Kullanım Adımları
 1. **Scripti çalıştırın**:
     ```sh
     python YoutubeBot.py
@@ -97,19 +97,26 @@ Detaylı kurulum adımları için aşağıdaki bölüme bakabilirsiniz.
        - Bu seçenekler, aramanızı daha spesifik hale getirmenizi sağlar.  
      - **3: Önceki Aramayı Devam Ettir**:  
        - Daha önce başlatılmış bir arama varsa, kaldığı yerden devam etmek için arama terimini girin.  
-       - Kayıtlı veri bulunmazsa, yeni bir arama başlatmanız istenir.
+       - Kayıtlı veri bulunmazsa, yeni bir arama başlatmanız istenir.  
+     - **4: Tek Bir URL ile Arama**:  
+       - Belirli bir YouTube videosunun meta verilerini almak için bir YouTube URL'si girin.  
+       - Bu yöntem yalnızca tek bir video üzerinde işlem yapar ve meta verileri ekrana yazdırır.  
+       - Meta veriler, veritabanına kaydedilmez, sadece hızlı bir görüntüleme yapılır.
 
-3. **Arka Plan İşlemi**:
+---
+
+## Ek Bilgilendirme
+### Arka Plan İşlemi:
    - Script tamamen arka planda çalışır. Tarayıcı penceresi veya grafik arayüz açmaz. Tüm işlemler programlama düzeyinde gerçekleştirilir.
 
-4. **Veri Çıktısı**:
+### Veri Çıktısı:
    - Kazılan video meta verileri, çalıştırılan dizinde bir **CSV dosyası** olarak kaydedilir. Her satırda video başlıkları, URL'ler ve diğer mevcut meta veriler bulunur.
 
-5. **Hata İşleme**:
+### Hata İşleme:
    - Belirli video verileri gizlenmişse (ör. kanal sınırlamaları nedeniyle), eksik değerler `Null` olarak görüntülenir.  
    - İşlem sırasında karşılaşılan hatalar terminalde görüntülenir ve çıktı dosyasında `Error` olarak işaretlenir.
 
-6. **Devam Etme Fonksiyonu**:
+### Devam Etme Fonksiyonu:
    - Script kesintiye uğrarsa, kazıma işlemini daha önce toplanmış verileri kaybetmeden kaldığı yerden devam ettirebilir.
 
 ## Katkıda Bulunma
