@@ -1,6 +1,8 @@
 # YouTube Web Kazıma Aracı
 ## YouTube Video Bilgisi Kazıyıcı
 
+---
+
 Bu proje, YouTube'dan video bilgilerini kazımak ve bunları CSV dosyası olarak kaydetmek için tasarlanmış bir web kazıma aracıdır. Bu araç, tarayıcı otomasyonu için Selenium ve veri manipülasyonu ve depolama için çeşitli Python kütüphanelerini kullanır.
 
 Kullanıcılar bir arama terimi girebilir ve program, ilgili tüm videoları kazıyacaktır. Reklamları ve kısa videoları yok sayar. Ayrıca, kaldığı yerden devam etme ve detaylı aramalar yapma özelliklerini destekler.
@@ -11,6 +13,8 @@ Kullanıcılar bir arama terimi girebilir ve program, ilgili tüm videoları kaz
 - Reklamları ve kısa videoları yok sayar.
 - Kaldığı yerden devam etmeyi destekler.
 - Daha spesifik sonuçlar için detaylı aramalara izin verir.
+
+---
 
 ## Gereksinimler
 
@@ -51,7 +55,9 @@ Kurulum adımlarında **gerekli kütüphaneleri yükleme ve güncelleme** adıml
 
 Detaylı kurulum adımları için aşağıdaki bölüme bakabilirsiniz.
 
-### Adımlar
+---
+
+### Kurulum Adımlar
 1. Depoyu klonlayın:
     ```sh
     git clone https://github.com/kasimblc/youtube-bot
@@ -74,6 +80,8 @@ Detaylı kurulum adımları için aşağıdaki bölüme bakabilirsiniz.
     pip install --upgrade selenium
     pip install --upgrade webdriver-manager
     ```
+
+---
     
 ## Kullanım Adımları
 1. **Scripti çalıştırın**:
