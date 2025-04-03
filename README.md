@@ -44,3 +44,12 @@ Veri alma sürecinde karşılaşılan sorunlar kullanıcıya hata mesajı olarak
 #### English:  
 Some YouTube channels may choose to hide certain data, which will then be displayed as "Null." Similarly, if comments on a video are disabled, the comment count cannot be retrieved and will be recorded as "Error."  
 Issues encountered during data collection will be presented as error messages on the screen and logged as "Error" in the database. Additionally, some video duration information may be inaccurate. Causes of incorrect durations often include advertisements or other technical issues within the YouTube player.  
+
+
+### Google Chrome 114 Sürümü İndirme Linkleri / Google Chrome 114 Download Links
+Google Chrome 114 sürümünü indirmek için aşağıdaki linklerden birini kullanabilirsiniz:  
+For downloading the Google Chrome 114 version, please use one of the links below:
+- [Google Chrome ve Chromium 114 (Kaynak 1)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)  
+- [Google Chrome ve Chromium 114 (Kaynak 2)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)  
+- [Google Chrome ve Chromium 114 (Kaynak 3)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)
+
