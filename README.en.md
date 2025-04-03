@@ -75,42 +75,49 @@ pip install --upgrade selenium
 pip install --upgrade webdriver-manager
 ```
 
-## Usage
-1. **Run the script**:
+## Usage Steps
+1. **Run the Script**:
     ```sh
     python YoutubeBot.py
     or
     python3 YoutubeBot.py
     ```
 
-2. **Choose Search Method**:
-   - When the script is executed, you will be prompted to choose one of the following search methods:
+2. **Choose the Search Method**:
+   - When the script is run, you will be prompted to choose one of the following search methods:
      - **1: Standard Search**:  
        - Enter a search term to fetch videos.  
-       - Global search is performed by default, as no language or country restrictions are set.  
-       - All videos matching the search term will be retrieved.  
-     - **2: Custom Search**:  
+       - By default, a global search is performed without language or country restrictions.  
+       - All videos matching the search term are retrieved.  
+     - **2: Advanced Search**:  
        - Allows for advanced search options. You can specify:  
-         - **Number of Videos**: Define how many videos to fetch. Enter `0` to retrieve all videos.  
-         - **Search Language**: Specify the language (e.g., `en` for English or `tr` for Turkish). If left empty, no language filter will be applied.  
-         - **Search Country**: Specify the country (e.g., `US` for the United States or `TR` for Turkey). If left empty, no country filter will be applied.  
-       - These options enable you to customize your search for more specific results.  
+         - **Number of Videos**: Define how many videos to fetch. Enter `0` to fetch all videos.  
+         - **Search Language**: Specify the language (e.g., `en` for English, `tr` for Turkish). If left blank, no language filter will be applied.  
+         - **Search Country**: Specify the country (e.g., `US` for the United States, `TR` for Turkey). If left blank, no country filter will be applied.  
+       - These options allow you to make your search more specific.  
      - **3: Resume Previous Search**:  
-       - If a previous search exists, enter its search term to continue scraping from where it was last interrupted.  
-       - If no saved data is found, you will be prompted to start a new search.
+       - If a search was previously initiated, enter the search term to continue from where it left off.  
+       - If no saved data is found, you will be prompted to start a new search.  
+     - **4: Single URL Search**:  
+       - Enter a specific YouTube video URL to fetch its metadata.  
+       - This method only processes one video and displays its metadata on the screen.  
+       - The metadata is not saved to the database, allowing for quick viewing.
 
-3. **Background Operation**:
-   - The script operates entirely in the background. It does not open a browser window or graphical interface. All actions are handled programmatically.
+---
 
-4. **Data Output**:
-   - Extracted video metadata will be saved in a CSV file in the current directory. Each row will include video titles, URLs, and any additional available metadata.
+## Additional Information
+### Background Process:
+   - The script operates entirely in the background. It does not open a browser window or graphical interface. All processes are performed programmatically.
 
-5. **Error Handling**:
-   - If certain video data is hidden (e.g., due to channel restrictions), the missing values will be displayed as `Null`.  
-   - Errors encountered during processing will be logged in the terminal and flagged as `Error` in the output file.
+### Data Output:
+   - Retrieved video metadata is saved as a **CSV file** in the directory where the script is run. Each row contains video titles, URLs, and other available metadata.
 
-6. **Resume Functionality**:
-   - If the script is interrupted, it can resume scraping from where it left off without losing previously collected data.
+### Error Handling:
+   - If certain video data is hidden (e.g., due to channel restrictions), missing values are displayed as `Null`.  
+   - Any errors encountered during the process are displayed in the terminal and marked as `Error` in the output file.
+
+### Resume Functionality:
+   - If the script is interrupted, it can resume the scraping process from where it left off without losing previously collected data.
 
 ## Contributing
 Feel free to submit issues or pull requests if you find any bugs or have suggestions for improvements.
