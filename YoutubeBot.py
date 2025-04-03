@@ -12,8 +12,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager # type: ignore
 
-#Selenium Bot İşlemleri
 
+# Programın bulunduğu ana dizini al
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+
+# "data" klasörünü oluştur (eğer yoksa)
+os.makedirs(DATA_DIR, exist_ok=True)
+
+
+### Selenium Bot İşlemleri
 def setup_driver():
     """
     Chrome WebDriver'ını başlatmak için gerekli ayarları yapar.
@@ -37,8 +45,8 @@ def setup_driver():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
 
-###Video Link Liste İşlemleri
 
+### Video Link Liste İşlemleri
 def get_video_links(search_term, num_videos, language=None, country=None):
     """
     Verilen arama terimi için YouTube video linklerini döndürür.
@@ -76,15 +84,15 @@ def get_video_links(search_term, num_videos, language=None, country=None):
             video_links.append((video_title, video_url))
     return video_links
 
-###Veri Alma İşlemleri
 
+### Veri Alma İşlemleri
 def get_like_count(driver):
     """
     YouTube videosunun beğeni sayısını alır ve ekrana yazdırır.
     """
     try:
         # Beğeni butonunu CSS seçici ile bulma
-        like_button = WebDriverWait(driver, 10).until(
+        like_button = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.yt-spec-button-shape-next.yt-spec-button-shape-next--tonal.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--icon-leading.yt-spec-button-shape-next--segmented-start'))
         )
         
@@ -101,28 +109,100 @@ def get_like_count(driver):
 
 def get_view_count(driver):
     """
-    YouTube videosunun görüntülenme sayısını alır.
+    Video görüntülenme sayısını alır. Hem "interactionCount" hem de "userInteractionCount" meta etiketlerini kontrol eder.
     """
-    try:
-        view_count = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'meta[itemprop="interactionCount"][content]'))
-        )
-        return view_count.get_attribute('content')
+    selectors = [
+        'meta[itemprop="userInteractionCount"][content]',
+        'meta[itemprop="interactionCount"][content]' 
+    ]
+    for sel in selectors:
+        try:
+            view_meta = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, sel))
+            )
+            if view_meta:
+                return view_meta.get_attribute('content')
+        except Exception:
+            continue
+    print("get_view_count: Uygun meta etiket bulunamadı")
+    return "Error"
 
-    except Exception as e:
-        print(f"Hata: {str(e)}")
-        return "Error"
+def get_comment_count(driver):
+    """
+    YouTube videosunun yorum sayısını alır. Yorumlar henüz yüklenmemişse,
+    sayfayı kademeli olarak kaydırır ve belirli sayıda denemeden sonra hata verir.
+    """
+    max_scroll_attempts = 3  # Maksimum kaydırma denemesi
+    attempt = 0
+    comment_count_element = None
+
+    # İlk olarak CSS seçici yöntemi ile deniyoruz
+    while attempt < max_scroll_attempts:
+        try:
+            comment_count_element = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, "#count yt-formatted-string span:first-of-type")
+                )
+            )
+            if comment_count_element:
+                break
+        except Exception as e:
+            # Bulunamadıysa sayfayı biraz kaydırıyoruz
+            driver.execute_script("window.scrollBy(0, 500);")
+            time.sleep(1.5)  # Kaydırma sonrası elementin yüklenmesi için bekleme
+            attempt += 1
+
+    # Eğer CSS seçici ile bulunamazsa, XPath yöntemiyle deniyoruz
+    if not comment_count_element:
+        try:
+            comment_count_element = WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "(//yt-formatted-string[@class='count-text style-scope ytd-comments-header-renderer']//span)[1]")
+                )
+            )
+        except Exception as e:
+            print(f"Yorum sayısı alınırken hata oluştu: {str(e)}")
+            return "Error"
+
+    # Gelen metni temizleyerek sayı formatına çeviriyoruz
+    comment_text = comment_count_element.text.strip().replace('.', '').replace(',', '')
+    return comment_text
 
 def get_upload_date(driver):
     """
     YouTube videosunun yüklenme tarihini alır.
     """
     try:
-        upload_date = WebDriverWait(driver, 10).until(
+        upload_date = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'meta[itemprop="uploadDate"][content]'))
         )
         return upload_date.get_attribute('content').split('T')[0] if upload_date else None
+    except Exception as e:
+        print(f"Hata: {str(e)}")
+        return "Error"
 
+def get_publish_date(driver):
+    """
+    YouTube videosunun yayınlanma tarihini alır.
+    """
+    try:
+        publish_date = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'meta[itemprop="datePublished"][content]'))
+        )
+        return publish_date.get_attribute('content').split('T')[0] if publish_date else None
+    except Exception as e:
+        print(f"Hata: {str(e)}")
+        return "Error"
+
+def get_video_category(driver):
+    """
+    YouTube videosunun kategori bilgisini alır.
+    """
+    try:
+        category = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'meta[itemprop="genre"][content]'))
+        )
+        return category.get_attribute('content') if category else None
     except Exception as e:
         print(f"Hata: {str(e)}")
         return "Error"
@@ -132,7 +212,7 @@ def get_subscriber_count(driver):
     YouTube videosunun kanal abone sayısını alır.
     """
     try:
-        subscriber_count_element = WebDriverWait(driver, 10).until(
+        subscriber_count_element = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '#owner-sub-count'))
         )
         subscriber_count_str = subscriber_count_element.get_attribute('aria-label')
@@ -148,39 +228,72 @@ def get_subscriber_count(driver):
 
 def get_duration(driver):
     """
-    YouTube videosunun süresini alır.
+    Video süresini öncelikle meta etiketinden alır.
+    Eğer meta etiketinde (itemprop="duration") bulunamazsa, oynatıcı üzerindeki süre göstergesinden okumaya çalışır.
     """
     try:
-        # Önce tüm zaman göstergesi divini bul
-        time_display_div = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.ytp-time-display.notranslate'))
+        # İlk öncelik meta etiketi: <meta itemprop="duration" content="...">
+        duration_meta = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'meta[itemprop="duration"][content]'))
         )
-
-        # Daha sonra bu div içinde süreyi içeren span'i bul
-        duration_element = time_display_div.find_element(By.CSS_SELECTOR, '.ytp-time-duration')
-        
-        return duration_element.text
-
+        if duration_meta:
+            # Meta etiketindeki süre bilgisini al, ve parse_duration ile düzenleyerek döndür.
+            meta_content = duration_meta.get_attribute('content')
+            return parse_duration(meta_content)
     except Exception as e:
-        print(f"Hata: {str(e)}")
-        return "Error"
+        print("Meta etiket ile duration alınamadı:", str(e))
+    
+    # Eğer meta etiketten alınamazsa, oynatıcıdaki süreyi deniyoruz:
+    selectors = [
+        '.ytp-time-display.notranslate.ytp-time-display-allow-autohide',  # En spesifik
+        '.ytp-time-display.notranslate',  # Orta seviye
+        '.ytp-time-display'  # En genel
+    ]
+    
+    duration_element = None
+    
+    for selector in selectors:
+        try:
+            time_display_div = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, selector))
+            )
+            # Süreyi içeren span'ı almayı dene:
+            duration_element = time_display_div.find_element(By.CSS_SELECTOR, '.ytp-time-duration')
+            if duration_element:
+                return duration_element.text
+        except Exception:
+            continue
+    
+    print("get_duration: Süre alınamadı")
+    return "Error"
 
 def get_channel_name(driver):
     """
     YouTube videosunun kanal adını alır.
+    Öncelikle meta etiketinden okumaya çalışır, eğer bulunamazsa alternatif yöntemi dener.
     """
+    try:
+        # İlk öncelik meta etiketi: <link itemprop="name" content="Kanal Adı">
+        channel_meta = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'span[itemprop="author"] link[itemprop="name"][content]'))
+        )
+        if channel_meta:
+            return channel_meta.get_attribute('content')
+    except Exception as e:
+        print("Meta etiket ile kanal adı alınamadı:", str(e))
+
+    # Alternatif yöntem: Kanal isminin geçtiği element
     try:
         channel_name_element = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.ytd-channel-name a'))
         )
         return channel_name_element.text
-
     except Exception as e:
         print(f"Hata: {str(e)}")
         return "Error"
 
-###Dönüştürme İşlemleri
 
+### Dönüştürme İşlemleri
 def extract_like_count(label_text):
     """
     Verilen metin içerisinden sayı değerini çıkarır ve düz bir sayı olarak döndürür.
@@ -230,89 +343,127 @@ def convert_subscriber_count(subscriber_count_str):
     else:
         return "Error"  # Dönüşüm yapılamayan durumlar için Hata döndür
 
-###Dosya İşlemleri
+def parse_duration(duration_str):
+    """
+    ISO 8601 formatındaki (örneğin 'PT81M24S', 'pt81m24s', 'PT1H5M3S', 'PT45S') video süresini
+    "HH:MM:SS" ya da "MM:SS" formatına çevirir. Küçük/büyük harf duyarlılığına dikkat etmez.
+    """
+    # Gelen string'i büyük harfe çeviriyoruz
+    duration_str = duration_str.upper()
+    
+    # ISO 8601 süresini parçalara ayıran regex deseni:
+    pattern = r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?'
+    match = re.match(pattern, duration_str)
+    if not match:
+        return "Error: Geçersiz süre formatı"
+    
+    h, m, s = match.groups()
+    h = int(h) if h else 0
+    m = int(m) if m else 0
+    s = int(s) if s else 0
+
+    # Toplam saniyeyi hesaplıyoruz
+    total_seconds = h * 3600 + m * 60 + s
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+
+    # Eğer süre 1 saatten uzun ise HH:MM:SS formatında, değilse MM:SS formatında döndürür
+    if hours > 0:
+        return f"{hours:02}:{minutes:02}:{seconds:02}"
+    else:
+        return f"{minutes}:{seconds:02}"
+
+### Dosya İşlemleri
+def get_save_path(search_term):
+    """
+    Belirtilen arama terimi için data klasörü altında bir dizin oluşturur.
+    Dosya kaydedilecek dizinin yolunu döndürür.
+    """
+    search_dir = os.path.join(DATA_DIR, search_term)
+    os.makedirs(search_dir, exist_ok=True)
+    return search_dir
 
 def create_csv(search_term):
     """
-    Verilen arama terimi ve video bilgilerini CSV dosyasını oluşturur.
+    Verilen arama terimi için CSV dosyasını oluşturur ve yolunu döndürür.
     """
-    filename = f"{search_term}.csv"
-    print(f"{filename} adlı CSV dosyası oluşturuldu.")
+    save_path = get_save_path(search_term)
+    filename = os.path.join(save_path, f"{search_term}.csv")
     return filename
 
 def save_to_csv(search_term, video_data):
     """
-    Verilen arama terimi ve video bilgilerini CSV dosyasına ekler.
+    Verilen arama terimi için video bilgilerini CSV dosyasına ekler.
     """
-    filename = f"{search_term}.csv"
-    headers = ['Video Title', 'Video URL', 'Channel Name', 'Upload Date',
-            'View Count', 'Like Count', 'Subscriber Count', 'Subscriber Count Text', 'Video Duration']
-
+    filename = create_csv(search_term)
+    headers = ['Video Title', 'Video URL', 'Channel Name', 'Upload Date', 'Publish Date',
+               'View Count', 'Like Count', 'Comment Count', 'Subscriber Count', 'Subscriber Count Text',
+               'Video Duration', 'Category']
     file_exists = os.path.isfile(filename)
+    
     with open(filename, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         if not file_exists:
             writer.writerow(headers)
-        for video in video_data:
-            writer.writerow(video)
-
-    print("Video bilgileri kaydedildi.")
+        writer.writerows(video_data)
+    
+    print(f"Video bilgileri {filename} dosyasına kaydedildi.")
 
 def save_video_links(search_term, video_links):
     """
-    Video bağlantılarını dosyaya kaydeder.
+    Video bağlantılarını dosyaya kaydeder (ana ve yedek).
     """
-    # Ana dosya
-    links_filename = create_csv(f"{search_term}_links")
-    with open(links_filename, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        for video_title, video_url in video_links:
-            writer.writerow([video_title, video_url])
-    print(f"{links_filename} adlı video bağlantıları dosyası oluşturuldu.")
+    save_path = get_save_path(search_term)
+    links_filename = os.path.join(save_path, f"{search_term}_links.csv")
+    backup_links_filename = os.path.join(save_path, f"{search_term}_links_backup.csv")
     
-    # Yedek dosya
-    backup_links_filename = create_csv(f"{search_term}_links_backup")
-    with open(backup_links_filename, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        for video_title, video_url in video_links:
-            writer.writerow([video_title, video_url])
-    print(f"{backup_links_filename} adlı yedek video bağlantıları dosyası oluşturuldu.")
+    for filename in [links_filename, backup_links_filename]:
+        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerows(video_links)
+        print(f"{filename} adlı video bağlantıları dosyası oluşturuldu.")
 
 def load_video_links(search_term):
     """
     Video bağlantılarını dosyadan yükler.
     """
-    links_filename = f"{search_term}_links.csv"
+    save_path = get_save_path(search_term)
+    links_filename = os.path.join(save_path, f"{search_term}_links.csv")
     video_links = []
+    
     if os.path.exists(links_filename):
         with open(links_filename, mode='r', newline='', encoding='utf-8') as file:
             reader = csv.reader(file)
-            for row in reader:
-                video_links.append((row[0], row[1]))
+            video_links = [(row[0], row[1]) for row in reader]
+    
     return video_links
 
 def remove_processed_link(search_term, processed_link):
     """
     İşlenen video bağlantısını CSV dosyasından çıkarır.
     """
-    links_filename = f"{search_term}_links.csv"
+    save_path = get_save_path(search_term)
+    links_filename = os.path.join(save_path, f"{search_term}_links.csv")
     video_links = load_video_links(search_term)
+    
     with open(links_filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         for video_title, video_url in video_links:
             if video_url != processed_link:
                 writer.writerow([video_title, video_url])
-    print(f"{processed_link} adlı video bağlantısı dosyadan çıkarıldı.")
+    
+    print(f"{processed_link} adlı video bağlantısı {links_filename} dosyasından çıkarıldı.")
 
-###Choose Search Methods
-
-def choose_search_method():
+### Choose Search Methods
+def choose_search_method(): 
     print("Arama yöntemini seçin:")
     print("1. Standart arama")
     print("2. Özel arama")
     print("3. Önceki işleme devam et")
+    print("4. Tek Url")
 
-    choice = input("Seçiminizi yapın (1/2/3): ").strip().lower()
+    choice = input("Seçiminizi yapın (1/2/3/4): ").strip().lower()
     return choice
 
 def handle_standard_search():
@@ -368,9 +519,19 @@ def handle_previous_search():
 
     return search_term, video_links
 
-###Process Videos
+def handle_single_url():
+    video_url = input("Lütfen tek bir video URL'si girin: ").strip()
+    if not video_url:
+        print("Geçersiz URL.")
+        return None, None
 
-def process_videos(driver, search_term, video_links):
+    video_title = "URL"
+    video_links = [(video_title, video_url)]
+    return "URL", video_links
+
+
+### Process Videos
+def process_videos(driver, search_term, video_links, choice):
     data_num = 1
     for video_title, video_url in video_links:
         try:
@@ -385,7 +546,6 @@ def process_videos(driver, search_term, video_links):
             print("Sayfa Yükleniyor ...")
 
             driver.get(video_url)
-            #driver.refresh()
             time.sleep(0.5)
 
             print("Veriler Alınıyor ...")
@@ -397,11 +557,17 @@ def process_videos(driver, search_term, video_links):
             upload_date = get_upload_date(driver) or 'Null'
             print(f'Yükleme Tarihi: {upload_date}')
 
+            publish_date = get_publish_date(driver) or 'Null'
+            print(f'Yayınlama Tarihi: {publish_date}')
+
             view_count = get_view_count(driver) or 'Null'
             print(f'Görüntülenme Sayısı: {view_count}')
 
             like_count = get_like_count(driver) or 'Null'
             print(f'Beğeni Sayısı: {like_count}')
+
+            comment_count = get_comment_count(driver) or 'Null'
+            print(f'Yorum Sayısı: {comment_count}')
 
             subscriber_count_text = get_subscriber_count(driver) or 'Null'
             print(f'Abone Sayısı Metin: {subscriber_count_text}')
@@ -419,28 +585,31 @@ def process_videos(driver, search_term, video_links):
 
             print(f'Abone Sayısı: {subscriber_count}')
 
-            time.sleep(0.5)
             duration = get_duration(driver) or 'Null'
             print(f'Video Süresi: {duration}')
 
-            video_data = [[video_title, video_url, channel_name, upload_date, view_count, like_count, subscriber_count, subscriber_count_text, duration]]
+            video_category = get_video_category(driver) or 'Null'
+            print(f'Kategori: {video_category}')
 
             print("-*-*-")
-            save_to_csv(search_term, video_data)
-            remove_processed_link(search_term, video_url)
+
+            # Eğer seçim '4' (Tek URL) değilse CSV'ye kaydet
+            if choice != '4':
+                video_data = [[video_title, video_url, channel_name, upload_date, publish_date, view_count, like_count,
+                               comment_count, subscriber_count, subscriber_count_text, duration, video_category]]
+                save_to_csv(search_term, video_data)
+                remove_processed_link(search_term, video_url)
 
         except Exception as e:
             print(f'Hata: {str(e)}')
 
         finally:
-            time.sleep(0.5)
             driver.get("about:blank")
             time.sleep(0.5)
             print("▲▲▲▲▲")
             print("")
 
-###Main
-
+### Main
 def main():
     choice = choose_search_method()
 
@@ -448,13 +617,14 @@ def main():
     print("Bu durumda, gizlenmiş veriler 'Null' olarak gösterilecektir.")
     print("Veri alınırken yaşanan sorunlar ekrana hata mesajı olarak yansıtılacak ve veritabanına 'Error' olarak kaydedilecektir.")
 
-
     if choice == '1':
         search_term, video_links = handle_standard_search()
     elif choice == '2':
         search_term, video_links = handle_custom_search()
     elif choice == '3':
         search_term, video_links = handle_previous_search()
+    elif choice == '4':
+        search_term, video_links = handle_single_url()
     else:
         print("Geçersiz seçim.")
         return
@@ -465,12 +635,15 @@ def main():
     try:
         driver = setup_driver()
         print("")
-        process_videos(driver, search_term, video_links)
+        process_videos(driver, search_term, video_links, choice)  # choice parametresi eklendi
+
+        print("Tarama işlemleri bitti!!!!!!")
     except Exception as e:
         print(f'Ana hata: {str(e)}')
     finally:
         if 'driver' in locals():
             driver.quit()
+
 
 if __name__ == "__main__":
     main()
