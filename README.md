@@ -29,9 +29,6 @@ Bu proje kullanıcılara şunları sağlar:
 
 ## Quick Start / Hızlı Başlangıç
 
-
-## Quick Start / Hızlı Başlangıç
-
 ## Pre-compiled Executable / Derlenmiş Çalıştırılabilir Versiyon
 
 **English:**  
