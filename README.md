@@ -6,9 +6,9 @@ This tool extracts video information from YouTube and saves it as a CSV file.
 
 Select your preferred language to learn more about the project:
 
-🌐 English Documentation
+- 🌐 [English Documentation](README.en.md)
 
-🇹🇷 Türkçe Dokümantasyon
+- 🇹🇷 [Türkçe Dokümantasyon](README.tr.md)
 
 Information
 
@@ -16,11 +16,11 @@ Google Chrome 114 Download Links
 
 For downloading the Google Chrome 114 version, please use one of the links below:
 
-Google Chrome and Chromium 114 (Source 1)
+- [Google Chrome and Chromium 114 (Source 1)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)
 
-Google Chrome and Chromium 114 (Source 2)
+- [Google Chrome and Chromium 114 (Source 2)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)
 
-Google Chrome and Chromium 114 (Source 3)
+- [Google Chrome and Chromium 114 (Source 3)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)
 
 Note: Currently, this bot supports only Google Chrome version 114.xx due to Selenium's compatibility limitations. To ensure smooth operation, please download Chrome 114 using the links above or search for Google Chrome 114 manually and install it on your system.
 
@@ -87,9 +87,9 @@ Bu araç, YouTube'dan video bilgilerini çıkartır ve CSV dosyası olarak kayde
 
 Proje hakkında daha fazla bilgi edinmek için tercih ettiğiniz dili seçin:
 
-🌐 İngilizce Dokümantasyon
+- 🌐 [English Documentation](README.en.md)
 
-🇹🇷 Türkçe Dokümantasyon
+- 🇹🇷 [Türkçe Dokümantasyon](README.tr.md)
 
 Bilgilendirme
 
@@ -97,11 +97,11 @@ Google Chrome 114 Sürümü İndirme Linkleri
 
 Google Chrome 114 sürümünü indirmek için aşağıdaki linklerden birini kullanabilirsiniz:
 
-Google Chrome ve Chromium 114 (Kaynak 1)
+- [Google Chrome and Chromium 114 (Source 1)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)
 
-Google Chrome ve Chromium 114 (Kaynak 2)
+- [Google Chrome and Chromium 114 (Source 2)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)
 
-Google Chrome ve Chromium 114 (Kaynak 3)
+- [Google Chrome and Chromium 114 (Source 3)](https://www.getgnu.org/internet/google-chrome-ve-chromium-114-0-5735-90-ve-91-surumleri-duyuruldu.html)
 
 Not: Bu bot, şu an Google Chrome 114.xx sürümünü desteklemektedir çünkü Selenium'un mevcut sürümü yalnızca Chrome 114 ile uyumludur. Sorunsuz çalışması için yukarıdaki bağlantılardan Chrome 114 sürümünü indirip yükleyebilir veya Google Chrome 114 araması yaparak manuel olarak sisteminize yükleyebilirsiniz.
 
